@@ -1,11 +1,11 @@
-package BeerList_pkg;
-
+//package BeerList_pkg;
+ 
 import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import BeerData_pkg.BeerData;
+//import BeerData_pkg.BeerData;
 
 public class BeerList extends Vector{
 
@@ -13,6 +13,7 @@ public class BeerList extends Vector{
     private Vector ranking   = new Vector();
     private Vector ranked_positions;
     private int n_criteria=-1;
+    private boolean isWindows = false;
     
     public BeerList(){
 	super();
@@ -117,11 +118,19 @@ public class BeerList extends Vector{
     }
 
     public boolean writeToFile(){
-	File saverDir = new File("./SavedBeer");
+	File saverDir;
+	if(isWindows)
+	    saverDir = new File(".\\SavedBeer");
+	else
+	    saverDir = new File("./SavedBeer");
 	if(!saverDir.isDirectory()){
 	    saverDir.mkdir();
 	}
-	File saverFile = new File("./SavedBeer/savedBeer.dat");
+	File saverFile;
+	if(isWindows)
+	    saverFile = new File(".\\SavedBeer\\savedBeer.dat");
+	else
+	    saverFile = new File("./SavedBeer/savedBeer.dat");
 
 	try{
 	    PrintWriter outs = new PrintWriter(saverFile);
@@ -198,8 +207,11 @@ public class BeerList extends Vector{
     }
 
     private boolean saveFileExists(){
-
-	File file = new File("./SavedBeer/savedBeer.dat");
+	File file;
+	if(isWindows)
+	    file = new File(".\\SavedBeer\\savedBeer.dat");
+	else
+	    file = new File("./SavedBeer/savedBeer.dat");
 	if(file.exists())
 	    return true;
 	else
@@ -207,7 +219,11 @@ public class BeerList extends Vector{
     }
 
     private void readInFile(){
-	File file = new File("./SavedBeer/savedBeer.dat");
+	File file;
+	if(isWindows)
+	    file = new File(".\\SavedBeer\\savedBeer.dat");
+	else
+	    file = new File("./SavedBeer/savedBeer.dat");
 	try{
 	    BufferedReader b = new BufferedReader(new FileReader(file));
 	
@@ -215,7 +231,7 @@ public class BeerList extends Vector{
 
 	    while ((readLine = b.readLine()) != null) {
 		
-		if(readLine.startsWith("Name")){
+		if(readLine.startsWith("Name ")){
 		    System.out.println("found first line");
 		    continue;
 		}

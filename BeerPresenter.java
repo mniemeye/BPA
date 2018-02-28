@@ -2,13 +2,14 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import BeerList_pkg.*;
-import BeerData_pkg.BeerData;
+//import BeerList_pkg.*;
+//import BeerData_pkg.BeerData;
 
 public class BeerPresenter implements ActionListener{
 
     private BeerWindow view;
     private BeerList list;
+    //private JPanel window;
 
     public BeerPresenter(BeerWindow w){
 	view=w;
@@ -16,6 +17,7 @@ public class BeerPresenter implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent evt){
+	System.out.println("actionPerformed");
 	if(evt.getActionCommand().equals("show list")){//From Main to List
 	    view.showListView();
 	    System.out.println("BP Main->List");
@@ -136,7 +138,7 @@ public class BeerPresenter implements ActionListener{
 	if(evt.getActionCommand().startsWith("note ")){
 	    String pos = evt.getActionCommand();
 	    pos = pos.substring(5,pos.length());
-	    view.showNoteView((BeerData)list.get(Integer.parseInt(pos)));
+	    view.showNoteView((BeerData)list.getBeerDataAt(Integer.parseInt(pos)));
 	}
 
 	if(evt.getActionCommand().startsWith("save note ")){
