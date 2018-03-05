@@ -12,7 +12,7 @@ public class BeerWindow extends JFrame{
     private BeerList List;
     private BeerPresenter Presenter;
     
-    private String previousPanel;
+    private String previousPanel="main";
 
     public  MainPanel mainPanel;
     public  ListPanel listPanel;
@@ -38,6 +38,14 @@ public class BeerWindow extends JFrame{
 
        	showMainView();
 	setVisible(true);
+    }
+    
+    public void setOLDPWD(String str){
+	previousPanel = str;
+    }
+
+    public String OLDPWD(){
+	return previousPanel;
     }
 
     public BeerList getList(){

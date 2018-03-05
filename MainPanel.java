@@ -11,8 +11,6 @@ public class MainPanel{
     public BeerList List;
     public BeerPresenter Presenter;
 
-    private BeerWindow view;
-    
     private JPanel main_header, main_list, main_list1, main_list2, main_list3, main_button;
     private JTextField main_addName, main_name1, main_average1, main_name2, main_average2, main_name3, main_average3;
     private JLabel main_label1, main_label2, main_label3;

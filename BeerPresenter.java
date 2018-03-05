@@ -19,6 +19,7 @@ public class BeerPresenter implements ActionListener{
     public void actionPerformed(ActionEvent evt){
 	System.out.println("actionPerformed");
 	if(evt.getActionCommand().equals("show list")){//From Main to List
+	    view.setOLDPWD("main");
 	    view.showListView();
 	    System.out.println("BP Main->List");
 	}
@@ -34,12 +35,14 @@ public class BeerPresenter implements ActionListener{
 		//for(int i=0;i<list.size();++i)
 		    //System.out.println(((BeerData)list.get(i)).getName().getText());
 		view.setGrade(((BeerData)list.get(list.size()-1)).getGrade(view.getCounter()));
+		view.setOLDPWD("main");
 		view.showAddView((BeerData)list.get(pos));
 	    }
 	    System.out.println("BP Add");
 	}
 
 	if(evt.getActionCommand().equals("to main")){//From List to Main
+	    view.setOLDPWD("list");
 	    view.showMainView();
 	    System.out.println("BP List->Main");	    
 	}
@@ -47,6 +50,7 @@ public class BeerPresenter implements ActionListener{
 	    if(Integer.parseInt(evt.getActionCommand())>=0){//From List to specific Add
 		view.setGrade(((BeerData)list.getBeerDataAt(Integer.parseInt(evt.getActionCommand()))).getGrade(view.getCounter()));
 		//view.showAddView((BeerData)list.get(Integer.parseInt(evt.getActionCommand())));
+		view.setOLDPWD("list");
 		view.showAddView(list.getBeerDataAt(Integer.parseInt(evt.getActionCommand())));
 		System.out.println("BP Edit Button");
 	    }
@@ -63,22 +67,25 @@ public class BeerPresenter implements ActionListener{
 	    current_beer = view.getCurrentBeer().getText();
 	    current_beer_pos = list.getPositionOf(current_beer);
 	    old_crit = ((BeerData)list.get(current_beer_pos)).getCriterion(view.getCounter());
-	    old_grade = view.getGrade();
-	    if(old_grade>3 ||old_grade<-3)
-		view.showAddView((BeerData)list.get(current_beer_pos));
-	    else{
-		//save data
-		((BeerData)list.get(current_beer_pos)).setGrade(old_crit,old_grade);
-		((BeerData)list.get(current_beer_pos)).actualiseAverage();
-		view.countUp();
-		//set new output
-		int new_grade;
-		new_grade = ((BeerData)list.get(current_beer_pos)).getGrade(view.getCounter());
-		view.setGrade(new_grade);
-		//draw new window
-		System.out.println("BP Next");
-		view.showAddView((BeerData)list.get(current_beer_pos));	    
+	    try{
+		old_grade = view.getGrade();
+		if(old_grade>3 ||old_grade<-3)
+		    view.showAddView((BeerData)list.get(current_beer_pos));
+		else{
+		    //save data
+		    ((BeerData)list.get(current_beer_pos)).setGrade(old_crit,old_grade);
+		    ((BeerData)list.get(current_beer_pos)).actualiseAverage();
+		    view.countUp();
+		    //set new output
+		    int new_grade;
+		    new_grade = ((BeerData)list.get(current_beer_pos)).getGrade(view.getCounter());
+		    view.setGrade(new_grade);
+		    //draw new window
+		    System.out.println("BP Next");
+		    view.showAddView((BeerData)list.get(current_beer_pos));	    
+		}
 	    }
+	    catch(Exception e){}
 	}
 	
 	if(evt.getActionCommand().equals("previous criterion")){
@@ -90,22 +97,25 @@ public class BeerPresenter implements ActionListener{
 	    current_beer = view.getCurrentBeer().getText();
 	    current_beer_pos = list.getPositionOf(current_beer);
 	    old_crit = ((BeerData)list.get(current_beer_pos)).getCriterion(view.getCounter());
-	    old_grade = view.getGrade();
-	    if(old_grade>3 ||old_grade<-3)
-		view.showAddView((BeerData)list.get(current_beer_pos));
-	    else{
-		//save data
-		((BeerData)list.get(current_beer_pos)).setGrade(old_crit,old_grade);
-		((BeerData)list.get(current_beer_pos)).actualiseAverage();
-		view.countDown();
-		//set new output
-		int new_grade;
-		new_grade = ((BeerData)list.get(current_beer_pos)).getGrade(view.getCounter());
-		view.setGrade(new_grade);
-		//draw new window
-		System.out.println("BP Previous");
-		view.showAddView((BeerData)list.get(current_beer_pos));	    	    
+	    try{
+		old_grade = view.getGrade();
+		if(old_grade>3 ||old_grade<-3)
+		    view.showAddView((BeerData)list.get(current_beer_pos));
+		else{
+		    //save data
+		    ((BeerData)list.get(current_beer_pos)).setGrade(old_crit,old_grade);
+		    ((BeerData)list.get(current_beer_pos)).actualiseAverage();
+		    view.countDown();
+		    //set new output
+		    int new_grade;
+		    new_grade = ((BeerData)list.get(current_beer_pos)).getGrade(view.getCounter());
+		    view.setGrade(new_grade);
+		    //draw new window
+		    System.out.println("BP Previous");
+		    view.showAddView((BeerData)list.get(current_beer_pos));	    	    
+		}
 	    }
+	    catch(Exception e){}
 	}
 
 	if(evt.getActionCommand().equals("save grades")){//From Add to Main, I think...
@@ -119,25 +129,30 @@ public class BeerPresenter implements ActionListener{
 	    //System.out.println(String.valueOf(current_beer_pos));
 	    current_crit = ((BeerData)list.get(current_beer_pos)).getCriterion(view.getCounter());
 	    //System.out.println(current_crit);
-	    current_grade = view.getGrade();
-	    //System.out.println(String.valueOf(current_grade));
-	    if(current_grade>3 ||current_grade<-3)
-		view.showAddView((BeerData)list.get(current_beer_pos));
-	    else{
-		((BeerData)list.get(current_beer_pos)).setGrade(current_crit,current_grade);
-		((BeerData)list.get(current_beer_pos)).actualiseAverage();
-		System.out.println(String.valueOf(((BeerData)list.get(current_beer_pos)).getAverage()));
-		list.evaluateRanking();
-		//list.sortVector();
-		System.out.println("BP Save");
-		list.writeToFile();
-		view.showMainView();
+	    try{
+		current_grade = view.getGrade();
+		//System.out.println(String.valueOf(current_grade));
+		if(current_grade>3 ||current_grade<-3)
+		    view.showAddView((BeerData)list.get(current_beer_pos));
+		else{
+		    ((BeerData)list.get(current_beer_pos)).setGrade(current_crit,current_grade);
+		    ((BeerData)list.get(current_beer_pos)).actualiseAverage();
+		    System.out.println(String.valueOf(((BeerData)list.get(current_beer_pos)).getAverage()));
+		    list.evaluateRanking();
+		    //list.sortVector();
+		    System.out.println("BP Save");
+		    list.writeToFile();
+		    view.setOLDPWD("add");
+		    view.showMainView();
+		}
 	    }
+	    catch(Exception e){}
 	}
 
 	if(evt.getActionCommand().startsWith("note ")){
 	    String pos = evt.getActionCommand();
 	    pos = pos.substring(5,pos.length());
+	    view.setOLDPWD("list");
 	    view.showNoteView((BeerData)list.getBeerDataAt(Integer.parseInt(pos)));
 	}
 
@@ -146,6 +161,7 @@ public class BeerPresenter implements ActionListener{
 	    pos = pos.substring(10,pos.length());
 	    ((BeerData)list.get(Integer.parseInt(pos))).makeNote(view.getNote());
 	    list.writeToFile();
+	    view.setOLDPWD("note");
 	    view.showListView();
 	}
     }
